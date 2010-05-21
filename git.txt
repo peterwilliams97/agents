@@ -1,0 +1,22 @@
+Global setup:
+ Download and install Git
+  git config --global user.name "Peter Williams"
+  git config --global user.email peter.williams.97@gmail.com
+        
+Next steps:
+  mkdir agents
+  cd agents
+  git init
+  touch README
+  git add README
+  git commit -m 'first commit'
+  git remote add origin git@github.com:peterwilliams97/agents.git
+  git push origin master
+      
+Existing Git Repo?
+  cd existing_git_repo
+  git remote add origin git@github.com:peterwilliams97/agents.git
+  git push origin master
+      
+Importing a Subversion Repo?
+  Click here

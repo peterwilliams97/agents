@@ -47,12 +47,12 @@ public class BuyerAgent extends Agent {
 	// The list of known seller agents
 	private AID[] sellerAgents;
 
-	// Put agent initializations here
+	// Initialize the Agent
 	protected void setup() {
-		// Printout a welcome message
+		// Show startup on console
 		System.out.println("Buyer agent " + getAID().getName() + " is starting.");
 
-		// Get the title of the book to buy as a start-up argument
+		// Read the order as a start-up argument
 		Object[] args = getArguments();
 		if (args != null && args.length > 0) {
 			String csvFilePath = (String)args[0];
@@ -95,7 +95,7 @@ public class BuyerAgent extends Agent {
 		}
 	}
 
-	// Put agent clean-up operations here
+	//  clean-up the agent
 	protected void takeDown() {
 		// Printout a dismissal message
 		System.out.println("Buyer-agent " + getAID().getName() + " terminating.");
@@ -103,20 +103,20 @@ public class BuyerAgent extends Agent {
 
 	/**
 	   Inner class RequestPerformer.
-	   This is the behaviour used by Book-buyer agents to request seller 
-	   agents the target book.
+	   This is the behaviour used by a Buyer Agents to ask all Supplier  
+	   Agents if they can fulfill the orer.
 	 */
 	private class RequestPerformer extends Behaviour {
-		private AID bestSeller; // The agent who provides the best offer 
-		private double bestPrice;  // The best offered price
-		private int repliesCnt = 0; // The counter of replies from seller agents
+		private AID bestSeller;     // The Supplier agent who provides the best offer 
+		private double bestPrice;   // The best offered price
+		private int repliesCnt = 0; // Number of replies from Supplier agents
 		private MessageTemplate mt; // The template to receive replies
 		private int step = 0;
 
 		public void action() {
 			switch (step) {
 			case 0:
-				// Send the cfp to all sellers
+				// Send the cfp to all Suppliers
 				ACLMessage cfp = new ACLMessage(ACLMessage.CFP);
 				for (int i = 0; i < sellerAgents.length; ++i) {
 					cfp.addReceiver(sellerAgents[i]);
@@ -131,7 +131,7 @@ public class BuyerAgent extends Agent {
 				step = 1;
 				break;
 			case 1:
-				// Receive all proposals/refusals from seller agents
+				// Receive all proposals/refusals from Supplier agents
 				ACLMessage reply = myAgent.receive(mt);
 				if (reply != null) {
 					// Reply received

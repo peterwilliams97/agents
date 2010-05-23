@@ -41,7 +41,7 @@ import jade.domain.FIPAAgentManagement.ServiceDescription;
 import java.util.*;
 
 public class SupplierAgent extends Agent {
-	//  catalogue of available items, the number of each item in stock and their prices.
+	//  Catalog of available items, the number of each item in stock and their prices.
 	private ItemList _catalog;
 	
 
@@ -82,11 +82,11 @@ public class SupplierAgent extends Agent {
 		// Add the behaviour serving purchase orders from buyer agents
 		addBehaviour(new PurchaseOrdersServer());
 		
-		// Printout a welcome message (for symmetry PCW)
+		// Show the Agent starting
 		System.out.println("Starting Supplier Agent " + getAID().getName());
 	}
 
-	// Put agent clean-up operations here
+	//  Clean-up operations here
 	protected void takeDown() {
 		// Deregister from the Yellow Pages
 		try {
@@ -103,9 +103,9 @@ public class SupplierAgent extends Agent {
 		
 	/**
 	   Inner class OfferRequestsServer.
-	   This is the behaviour used by Book-seller agents to serve incoming requests 
-	   for offer from buyer agents.
-	   If the requested book is in the local catalogue the seller agent replies 
+	   This is the behaviour used by the Supplier Agnet to process order requests 
+	   from Buyer Agents.
+	   If the order can be fulfilled from the catalog then the Supplier Agent replies 
 	   with a PROPOSE message specifying the price. Otherwise a REFUSE message is
 	   sent back.
 	 */
@@ -130,7 +130,7 @@ public class SupplierAgent extends Agent {
 					reply.setContent(String.valueOf(price));
 				}
 				else {
-					// The order can NOT be fulfilled from catalog.
+					// The order can NOT be fulfilled from the catalog.
 					reply.setPerformative(ACLMessage.REFUSE);
 					reply.setContent("not-available");
 				}
@@ -144,10 +144,10 @@ public class SupplierAgent extends Agent {
 
 	/**
 	   Inner class PurchaseOrdersServer.
-	   This is the behaviour used by Book-seller agents to serve incoming 
-	   offer acceptances (i.e. purchase orders) from buyer agents.
-	   The seller agent removes the purchased book from its catalogue 
-	   and replies with an INFORM message to notify the buyer that the
+	   This is the behaviour used by the Supplier Agent to complete
+	   orders from Buyer agents.
+	   The Supplier Agent subtracts the order from its catalogue 
+	   and replies with an INFORM message to notify the Buyer that the
 	   purchase has been sucesfully completed.
 	 */
 	private class PurchaseOrdersServer extends CyclicBehaviour {
@@ -181,5 +181,5 @@ public class SupplierAgent extends Agent {
 				block();
 			}
 		}
-	}  // End of inner class OfferRequestsServer
+	}  
 }

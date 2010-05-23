@@ -315,4 +315,13 @@ public class ItemList {
 		}
 		return new ItemList(costedPartLists);
 	}
+	
+	public String getAsString() {
+		String itemListString = "";
+		for (PartItemList part: getPartLists()) {
+			String partString = part.getName() + "," + part.getNumber() + "," + part.getUnitPriceInDollars();
+			itemListString += partString + ";";
+		}
+		return itemListString;
+	}
 }

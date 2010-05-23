@@ -34,34 +34,37 @@ import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
 
 public class BuyerAgent extends Agent {
-	// The title of the book to buy
-	private String targetBookTitle;
+	// Order to place in format 'item1,number1;item2,price2;..'
+	private String _orderString;
 	// The list of known seller agents
 	private AID[] sellerAgents;
 
 	// Put agent initializations here
 	protected void setup() {
 		// Printout a welcome message
-		System.out.println("Hallo! Buyer-agent " + getAID().getName() + " is ready.");
+		System.out.println("Buyer agent " + getAID().getName() + " is starting.");
 
 		// Get the title of the book to buy as a start-up argument
 		Object[] args = getArguments();
 		if (args != null && args.length > 0) {
-			targetBookTitle = (String) args[0];
-			System.out.println("Target book is "+targetBookTitle);
-
+			String csvFilePath = (String)args[0];
+			System.out.println("Reading order from '" + csvFilePath + "'");
+			ItemList order = new ItemList(csvFilePath);
+			_orderString = order.getAsString();
+			System.out.println("Order string is '" + _orderString + "'");
+			
 			// Add a TickerBehaviour that schedules a request to seller agents every minute
 			addBehaviour(new TickerBehaviour(this, 60000) {
 				protected void onTick() {
-					System.out.println("Trying to buy '" + targetBookTitle + "'");
+					System.out.println("Trying to buy '" + _orderString + "'");
 					// Update the list of seller agents
 					DFAgentDescription template = new DFAgentDescription();
 					ServiceDescription sd = new ServiceDescription();
-					sd.setType("book-selling");
+					sd.setType("supplier");
 					template.addServices(sd);
 					try {
 						DFAgentDescription[] result = DFService.search(myAgent, template); 
-						System.out.println("Found the following " + result.length + " seller agents:");
+						System.out.println("Found the following " + result.length + " supplier agents:");
 						sellerAgents = new AID[result.length];
 						for (int i = 0; i < result.length; ++i) {
 							sellerAgents[i] = result[i].getName();
@@ -79,7 +82,7 @@ public class BuyerAgent extends Agent {
 		}
 		else {
 			// Make the agent terminate
-			System.out.println("No target book title specified");
+			System.out.println("No order CSV file path specified");
 			doDelete();
 		}
 	}
@@ -87,7 +90,7 @@ public class BuyerAgent extends Agent {
 	// Put agent clean-up operations here
 	protected void takeDown() {
 		// Printout a dismissal message
-		System.out.println("Buyer-agent "+getAID().getName()+" terminating.");
+		System.out.println("Buyer-agent " + getAID().getName() + " terminating.");
 	}
 
 	/**
@@ -97,7 +100,7 @@ public class BuyerAgent extends Agent {
 	 */
 	private class RequestPerformer extends Behaviour {
 		private AID bestSeller; // The agent who provides the best offer 
-		private int bestPrice;  // The best offered price
+		private double bestPrice;  // The best offered price
 		private int repliesCnt = 0; // The counter of replies from seller agents
 		private MessageTemplate mt; // The template to receive replies
 		private int step = 0;
@@ -110,7 +113,7 @@ public class BuyerAgent extends Agent {
 				for (int i = 0; i < sellerAgents.length; ++i) {
 					cfp.addReceiver(sellerAgents[i]);
 				} 
-				cfp.setContent(targetBookTitle);
+				cfp.setContent(_orderString);
 				cfp.setConversationId("book-trade");
 				cfp.setReplyWith("cfp"+System.currentTimeMillis()); // Unique value
 				myAgent.send(cfp);
@@ -126,7 +129,7 @@ public class BuyerAgent extends Agent {
 					// Reply received
 					if (reply.getPerformative() == ACLMessage.PROPOSE) {
 						// This is an offer 
-						int price = Integer.parseInt(reply.getContent());
+						double price = Double.parseDouble(reply.getContent());
 						if (bestSeller == null || price < bestPrice) {
 							// This is the best offer at present
 							bestPrice = price;
@@ -147,9 +150,9 @@ public class BuyerAgent extends Agent {
 				// Send the purchase order to the seller that provided the best offer
 				ACLMessage order = new ACLMessage(ACLMessage.ACCEPT_PROPOSAL);
 				order.addReceiver(bestSeller);
-				order.setContent(targetBookTitle);
+				order.setContent(_orderString);
 				order.setConversationId("book-trade");
-				order.setReplyWith("order"+System.currentTimeMillis());
+				order.setReplyWith("order" + System.currentTimeMillis());
 				myAgent.send(order);
 				// Prepare the template to get the purchase order reply
 				mt = MessageTemplate.and(MessageTemplate.MatchConversationId("book-trade"),
@@ -163,7 +166,7 @@ public class BuyerAgent extends Agent {
 					// Purchase order reply received
 					if (reply.getPerformative() == ACLMessage.INFORM) {
 						// Purchase successful. We can terminate
-						System.out.println(targetBookTitle+" successfully purchased from agent "+reply.getSender().getName());
+						System.out.println(_orderString + " successfully purchased from agent "+reply.getSender().getName());
 						System.out.println("Price = "+bestPrice);
 						myAgent.doDelete();
 					}
@@ -182,7 +185,7 @@ public class BuyerAgent extends Agent {
 
 		public boolean done() {
 			if (step == 2 && bestSeller == null) {
-				System.out.println("Attempt failed: "+targetBookTitle+" not available for sale");
+				System.out.println("Attempt failed: "+_orderString+" not available for sale");
 			}
 			return ((step == 2 && bestSeller == null) || step == 4);
 		}

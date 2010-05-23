@@ -1,0 +1,6 @@
+*.jar
+*.zip
+*.class
+*.exe
+doc/
+lib/

@@ -93,8 +93,8 @@ public class ItemList {
 			System.out.println("-- " + row.get(0) + "," + row.get(1) + "," + row.get(2) + ",");
 			try {
 				String name = row.get(0);
-				double priceInDollars = Double.parseDouble(row.get(1));
-				int    number = Integer.parseInt(row.get(2));
+				double priceInDollars = Double.parseDouble(row.get(2));
+				int    number = Integer.parseInt(row.get(1));
 				assert(priceInDollars > 0.0);
 				assert(number > 0);
 				PartItemList part = new PartItemList(name, priceInDollars, number);

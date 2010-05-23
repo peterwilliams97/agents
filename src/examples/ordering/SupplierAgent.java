@@ -47,12 +47,14 @@ public class SupplierAgent extends Agent {
 		if (args != null && args.length > 0) {
 			String csvFilePath = (String) args[0];
 			System.out.println("Reading catalog from '" + csvFilePath + "'");
+			_catalog = new ItemList(csvFilePath);
 		} else {
 			System.err.println("No catalog file name in agent command lines");
 			// Terminate agent
 			System.out.println("No target book title specified");
 			doDelete();
 		}
+		System.out.println("Catalog has " + _catalog.getPartLists().size() + " rows worth $" + _catalog.getPriceInDollars());
 
 		// Register this Supplier service in the Yellow Pages
 		DFAgentDescription dfd = new DFAgentDescription();

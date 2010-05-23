@@ -1,1 +1,0 @@
-java jade.Boot -agents Buyer1:examples.bookTrading.BookBuyerAgent(xyz);Buyer2:examples.bookTrading.BookBuyerAgent(xyz);Buyer3:examples.bookTrading.BookBuyerAgent(xyz);Seller1:examples.bookTrading.BookSellerAgent;Seller2:examples.bookTrading.BookSellerAgent;Seller3:examples.bookTrading.BookSellerAgent

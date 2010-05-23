@@ -42,6 +42,7 @@ public class BookSellerAgent extends Agent {
 
 	// Put agent initializations here
 	protected void setup() {
+	   
 		// Create the catalogue
 		catalogue = new Hashtable();
 
@@ -68,6 +69,9 @@ public class BookSellerAgent extends Agent {
 
 		// Add the behaviour serving purchase orders from buyer agents
 		addBehaviour(new PurchaseOrdersServer());
+		
+		// Printout a welcome message (for symmetry PCW)
+		System.out.println("Hallo! Seller-agent " + getAID().getName() + " is ready.");
 	}
 
 	// Put agent clean-up operations here

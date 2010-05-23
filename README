@@ -43,3 +43,54 @@ java jade.Boot -port 1098 -agents "Big-Bad-John:examples.bookTrading.BookBuyerAg
 Seller
 
 java jade.Boot -port 1097 -agents "Gentleman-Jim:examples.bookTrading.BookSellerAgent(War-and-Peace)"
+
+Running multiple agents
+=======================
+java jade.Boot -agents Buyer1:examples.bookTrading.BookBuyerAgent(xyz);Buyer2:examples.bookTrading.BookBuyerAgent(xyz);Buyer3:examples.bookTrading.BookBuyerAgent(xyz);Seller1:examples.bookTrading.BookSellerAgent;Seller2:examples.bookTrading.BookSellerAgent;Seller3:examples.bookTrading.BookSellerAgent
+
+Found the following 3 seller agents:
+Seller3@192.168.0.4:1099/JADE
+Seller1@192.168.0.4:1099/JADE
+Seller2@192.168.0.4:1099/JADE
+Found the following 3 seller agents:
+Seller3@192.168.0.4:1099/JADE
+Seller1@192.168.0.4:1099/JADE
+Seller2@192.168.0.4:1099/JADE
+Found the following 3 seller agents:
+Seller3@192.168.0.4:1099/JADE
+Seller1@192.168.0.4:1099/JADE
+Seller2@192.168.0.4:1099/JADE
+xyz sold to agent Buyer3@192.168.0.4:1099/JADE
+xyz successfully purchased from agent Seller1@192.168.0.4:1099/JADE
+Price = 20
+Attempt failed: xyz not available for sale
+Buyer-agent Buyer3@192.168.0.4:1099/JADE terminating.
+Attempt failed: xyz not available for sale
+xyz inserted into catalogue. Price = 10
+xyz inserted into catalogue. Price = 5
+Trying to buy 'xyz'
+Found the following 3 seller agents:
+Seller3@192.168.0.4:1099/JADE
+Seller1@192.168.0.4:1099/JADE
+Seller2@192.168.0.4:1099/JADE
+Trying to buy 'xyz'
+xyz sold to agent Buyer2@192.168.0.4:1099/JADE
+Found the following 3 seller agents:
+Seller3@192.168.0.4:1099/JADE
+Seller1@192.168.0.4:1099/JADE
+Seller2@192.168.0.4:1099/JADE
+xyz successfully purchased from agent Seller2@192.168.0.4:1099/JADE
+Price = 5
+xyz sold to agent Buyer1@192.168.0.4:1099/JADE
+Buyer-agent Buyer2@192.168.0.4:1099/JADE terminating.
+xyz successfully purchased from agent Seller3@192.168.0.4:1099/JADE
+Price = 10
+Buyer-agent Buyer1@192.168.0.4:1099/JADE terminating.
+
+
+
+
+
+Yellow Pages??? Does not work!!
+------------
+java jade.Boot -port 1095 -jade_core_nodeMonitoring_UDPNodeMonitoringService_port 5555 -agents "Gentleman-Jim:examples.bookTrading.BookSellerAgent(War-and-Peace)"

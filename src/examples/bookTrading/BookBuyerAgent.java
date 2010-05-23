@@ -42,7 +42,7 @@ public class BookBuyerAgent extends Agent {
 	// Put agent initializations here
 	protected void setup() {
 		// Printout a welcome message
-		System.out.println("Hallo! Buyer-agent "+getAID().getName()+" is ready.");
+		System.out.println("Hallo! Buyer-agent " + getAID().getName() + " is ready.");
 
 		// Get the title of the book to buy as a start-up argument
 		Object[] args = getArguments();
@@ -53,7 +53,7 @@ public class BookBuyerAgent extends Agent {
 			// Add a TickerBehaviour that schedules a request to seller agents every minute
 			addBehaviour(new TickerBehaviour(this, 60000) {
 				protected void onTick() {
-					System.out.println("Trying to buy "+targetBookTitle);
+					System.out.println("Trying to buy '" + targetBookTitle + "'");
 					// Update the list of seller agents
 					DFAgentDescription template = new DFAgentDescription();
 					ServiceDescription sd = new ServiceDescription();
@@ -61,7 +61,7 @@ public class BookBuyerAgent extends Agent {
 					template.addServices(sd);
 					try {
 						DFAgentDescription[] result = DFService.search(myAgent, template); 
-						System.out.println("Found the following seller agents:");
+						System.out.println("Found the following " + result.length + " seller agents:");
 						sellerAgents = new AID[result.length];
 						for (int i = 0; i < result.length; ++i) {
 							sellerAgents[i] = result[i].getName();

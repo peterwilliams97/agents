@@ -1,5 +1,6 @@
 package examples.ordering;
 
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -48,7 +49,7 @@ public class ItemList {
 		return priceInDollars;
 	}
 	
-	private static final int ITEMS_PER_ROW = 3;
+	private static final int ITEMS_PER_ROW = 2;
 
 	/**
 	 * Read a CSV file into a 2d list of string
@@ -72,7 +73,7 @@ public class ItemList {
 					if (row.size() < ITEMS_PER_ROW) {
 						System.err.println(fileName + ":" + (lineNumber+1) + " has less than " + ITEMS_PER_ROW + " items: " + line);
 					}
-					System.out.println("** " + row.get(0) + "," + row.get(1) + "," + row.get(2) + ",");
+					//System.out.println("** " + row.get(0) + "," + row.get(1) + "," + row.get(2) + ",");
 					grid.add(row);
 					++lineNumber;
 				}
@@ -109,7 +110,7 @@ public class ItemList {
 			if (row.size() < ITEMS_PER_ROW) {
 				System.err.println(" " + (lineNumber+1) + " has less than " + ITEMS_PER_ROW + " items: " + line);
 			}
-			System.out.println("** " + row.get(0) + "," + row.get(1) + "," + row.get(2) + ",");
+			//System.out.println("** " + row.get(0) + "," + row.get(1) + "," + row.get(2) + ",");
 			grid.add(row);
 			++lineNumber;
 		}
@@ -123,13 +124,14 @@ public class ItemList {
 		for (List<String> row: grid) {
 			System.out.println("  " + row.size());
 			assert(row.size() >= ITEMS_PER_ROW); // see readFromCsvFile()
-			System.out.println("-- " + row.get(0) + "," + row.get(1) + "," + row.get(2) + ",");
+			//System.out.println("-- " + row.get(0) + "," + row.get(1) + "," + row.get(2) + ",");
 			try {
 				String name = row.get(0);
-				double priceInDollars = Double.parseDouble(row.get(2));
 				int    number = Integer.parseInt(row.get(1));
-				assert(priceInDollars > 0.0);
-				assert(number > 0);
+				double priceInDollars = 0.0;
+				if (row.size() > 2) {
+					priceInDollars = Double.parseDouble(row.get(2));
+				}
 				PartItemList part = new PartItemList(name, priceInDollars, number);
 				System.out.println("++ " + part.getName() + "," + part.getUnitPriceInDollars() + "," + part.getNumber() + "," + part.getPriceInDollars());
 				partLists.add(part);
@@ -137,120 +139,6 @@ public class ItemList {
 				System.err.println("Error parsing string:" + e);
 			}
 		}
-
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
 		return partLists;
 	}
 	

@@ -35,27 +35,31 @@ import jade.domain.FIPAAgentManagement.ServiceDescription;
 import java.util.*;
 
 public class SupplierAgent extends Agent {
-	// The catalogue of books for sale (maps the title of a book to its price)
-	private Hashtable catalogue;
-	// The GUI by means of which the user can add books in the catalogue
-	private BookSellerGui myGui;
+	//  catalogue of available items, the number of each item in stock and their prices.
+	private ItemList _catalog;
+	
 
-	// Put agent initializations here
+	// Initialize agent
 	protected void setup() {
 	   
-		// Create the catalogue
-		catalogue = new Hashtable();
+		// CSV file containing list of items in catalog is passed in as the agent argument
+		Object[] args = getArguments();
+		if (args != null && args.length > 0) {
+			String csvFilePath = (String) args[0];
+			System.out.println("Reading catalog from '" + csvFilePath + "'");
+		} else {
+			System.err.println("No catalog file name in agent command lines");
+			// Terminate agent
+			System.out.println("No target book title specified");
+			doDelete();
+		}
 
-		// Create and show the GUI 
-		myGui = new BookSellerGui(this);
-		myGui.showGui();
-
-		// Register the book-selling service in the yellow pages
+		// Register this Supplier service in the Yellow Pages
 		DFAgentDescription dfd = new DFAgentDescription();
 		dfd.setName(getAID());
 		ServiceDescription sd = new ServiceDescription();
-		sd.setType("book-selling");
-		sd.setName("JADE-book-trading");
+		sd.setType("supplier");
+		sd.setName("JADE-supplier");
 		dfd.addServices(sd);
 		try {
 			DFService.register(this, dfd);
@@ -71,27 +75,27 @@ public class SupplierAgent extends Agent {
 		addBehaviour(new PurchaseOrdersServer());
 		
 		// Printout a welcome message (for symmetry PCW)
-		System.out.println("Hallo! Seller-agent " + getAID().getName() + " is ready.");
+		System.out.println("Starting Supplier Agent " + getAID().getName());
 	}
 
 	// Put agent clean-up operations here
 	protected void takeDown() {
-		// Deregister from the yellow pages
+		// Deregister from the Yellow Pages
 		try {
 			DFService.deregister(this);
 		}
 		catch (FIPAException fe) {
 			fe.printStackTrace();
 		}
-		// Close the GUI
-		myGui.dispose();
-		// Printout a dismissal message
-		System.out.println("Seller-agent "+getAID().getName()+" terminating.");
+		
+		// Show termination in the console
+		System.out.println("Supplier Agent " + getAID().getName() + " terminating.");
 	}
 
 	/**
      This is invoked by the GUI when the user adds a new book for sale
 	 */
+	 /*
 	public void updateCatalogue(final String title, final int price) {
 		addBehaviour(new OneShotBehaviour() {
 			public void action() {
@@ -100,7 +104,7 @@ public class SupplierAgent extends Agent {
 			}
 		} );
 	}
-
+	*/	
 	/**
 	   Inner class OfferRequestsServer.
 	   This is the behaviour used by Book-seller agents to serve incoming requests 
@@ -117,15 +121,20 @@ public class SupplierAgent extends Agent {
 				// CFP Message received. Process it
 				String title = msg.getContent();
 				ACLMessage reply = msg.createReply();
-
-				Integer price = (Integer) catalogue.get(title);
-				if (price != null) {
-					// The requested book is available for sale. Reply with the price
+				
+				ItemList order = new ItemList(title, false);
+				double price = -1.0;
+				if (_catalog.contains(order)) {
+					ItemList costedOrder = _catalog.getCostedOrder(order);
+					price = costedOrder.getPriceInDollars();
+				}
+				if (price >= 0.0) {
+					// The order can be fulfilled from catalog. Reply with the price
 					reply.setPerformative(ACLMessage.PROPOSE);
-					reply.setContent(String.valueOf(price.intValue()));
+					reply.setContent(String.valueOf(price));
 				}
 				else {
-					// The requested book is NOT available for sale.
+					// The order can NOT be fulfilled from catalog.
 					reply.setPerformative(ACLMessage.REFUSE);
 					reply.setContent("not-available");
 				}
@@ -154,10 +163,13 @@ public class SupplierAgent extends Agent {
 				String title = msg.getContent();
 				ACLMessage reply = msg.createReply();
 
-				Integer price = (Integer) catalogue.remove(title);
-				if (price != null) {
+				ItemList order = new ItemList(title, false);
+				double price = -1.0;
+				if (_catalog.contains(order)) {
+					_catalog.subtract(order);
+		
 					reply.setPerformative(ACLMessage.INFORM);
-					System.out.println(title+" sold to agent "+msg.getSender().getName());
+					System.out.println("'" +title + "' sold to agent " + msg.getSender().getName());
 				}
 				else {
 					// The requested book has been sold to another buyer in the meanwhile .

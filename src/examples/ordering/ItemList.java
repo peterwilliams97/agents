@@ -30,6 +30,11 @@ public class ItemList {
 		List<List<String>> grid = readFromCsvFile(fileName);
 		_partLists = stringGridToItemlist(grid);
 	}
+	
+	public ItemList(String input, boolean distinguishFromOtherConstructor) {
+		List<List<String>> grid = readFromString(input);
+		_partLists = stringGridToItemlist(grid);
+	}
 		
 	public List<PartItemList> getPartLists() {
 		return _partLists;
@@ -79,6 +84,34 @@ public class ItemList {
 		}
 		catch (IOException e) {
 			System.err.println("Error opening " + fileName + ": " + e);
+		}
+		return grid;
+	}
+	
+	/**
+	 * Read a semi-colon separated string of comma separated strings into a 2d list of 
+	 * string
+	 * @param input The input string
+	 * @return  Array of array of strings
+	 */
+	private static List<List<String>> readFromString(String input) {
+		List<List<String> > grid = new ArrayList<List<String> >();
+		int lineNumber = 0;
+	
+		StringTokenizer tokenizerOuter = new StringTokenizer(input, ";");
+		while (tokenizerOuter.hasMoreTokens())  {
+			String line = tokenizerOuter.nextToken().trim();
+			List<String> row = new ArrayList<String>();
+			StringTokenizer tokenizer = new StringTokenizer(line, ",");
+			while (tokenizer.hasMoreTokens())  {
+				row.add(tokenizer.nextToken().trim());
+			}
+			if (row.size() < ITEMS_PER_ROW) {
+				System.err.println(" " + (lineNumber+1) + " has less than " + ITEMS_PER_ROW + " items: " + line);
+			}
+			System.out.println("** " + row.get(0) + "," + row.get(1) + "," + row.get(2) + ",");
+			grid.add(row);
+			++lineNumber;
 		}
 		return grid;
 	}

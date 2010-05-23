@@ -22,3 +22,24 @@ java jade.Boot -agents John:examples.peter.PeterAgent
 Args are inside (). Claims to support space separated args but on ever reports 1 arg
 Fails if no "". Condenses to single arg if there are ""
 java  jade.Boot -agents "John:examples.peter.PeterAgent(arg1 arg2 arg3)"
+
+BookTrading examples
+--------------------
+Each instance running on same computer needs to use a different port. Will try counting backwards
+from defautl port 1099
+
+C:\java\jade>java jade.Boot -agents "Big-Bad-John:examples.bookTrading.BookBuyerAgent(War-and-Peace)"
+....
+Hallo! Buyer-agent Big-Bad-John@192.168.0.4:1099/JADE is ready.
+Target book is War-and-Peace
+
+java jade.Boot -agents "Gentleman-Jim:examples.bookTrading.BookSellerAgent(War-and-Peace)"
+
+
+Second buyer
+
+java jade.Boot -port 1098 -agents "Big-Bad-John:examples.bookTrading.BookBuyerAgent(War-and-Peace)"
+
+Seller
+
+java jade.Boot -port 1097 -agents "Gentleman-Jim:examples.bookTrading.BookSellerAgent(War-and-Peace)"

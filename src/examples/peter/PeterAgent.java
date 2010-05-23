@@ -14,6 +14,18 @@ public class PeterAgent extends Agent {
   protected void setup() {
   	System.out.println("Hello from Peter! My name is " + getLocalName());
   	
+	// Read the args if there are any
+	Object[] args = getArguments();
+	if (args != null) {
+		for (int i = 0; i < args.length; i++) {
+			System.out.println("Argument " + i + ": " + args[i].toString());
+		}
+	} else {
+		System.out.println("No arguments");
+	}
+	
+
+
   	// Make this agent terminate
   	doDelete();
   } 

@@ -1,5 +1,24 @@
+Playing Around with Jade (http://jade.tilab.com/)
+=================================================
+This project is to illustrate and document the basic patterns of usage of Jade.
+
+The initial setup is Windows specific. This is because I am trying to do this on a Saturday
+and Jade installs and works better out of the box on my Windows laptop than my mbp.
+
+Setting up Jade
+---------------
+Follow instructions on web page then create setenv.bat
+
 Creating Jade agents
 --------------------
 Create a class
 Put it in a jar file
 Add jar file to classpath
+
+Typical Usages
+--------------
+java jade.Boot -agents John:examples.peter.PeterAgent
+
+Args are inside (). Claims to support space separated args but on ever reports 1 arg
+Fails if no "". Condenses to single arg if there are ""
+java  jade.Boot -agents "John:examples.peter.PeterAgent(arg1 arg2 arg3)"

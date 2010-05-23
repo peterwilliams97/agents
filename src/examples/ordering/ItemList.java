@@ -1,6 +1,5 @@
 package examples.ordering;
 
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -64,7 +63,7 @@ public class ItemList {
 			try {
 				String line;
 				while ((line = input.readLine()) != null) {
-					System.out.println(fileName + " " + lineNumber + ": '" + line + "'");
+					//System.out.println(fileName + " " + lineNumber + ": '" + line + "'");
 					List<String> row = new ArrayList<String>();
 					StringTokenizer tokenizer = new StringTokenizer(line, ",");
 					while (tokenizer.hasMoreTokens())  {
@@ -119,10 +118,10 @@ public class ItemList {
 	
 	
 	private static List<PartItemList> stringGridToItemlist(List<List<String>> grid) {
-		System.out.println(" " + grid.size());
+		//System.out.println(" " + grid.size());
 		List<PartItemList> partLists = new ArrayList<PartItemList>();
 		for (List<String> row: grid) {
-			System.out.println("  " + row.size());
+			//System.out.println("  " + row.size());
 			assert(row.size() >= ITEMS_PER_ROW); // see readFromCsvFile()
 			//System.out.println("-- " + row.get(0) + "," + row.get(1) + "," + row.get(2) + ",");
 			try {
@@ -133,7 +132,7 @@ public class ItemList {
 					priceInDollars = Double.parseDouble(row.get(2));
 				}
 				PartItemList part = new PartItemList(name, priceInDollars, number);
-				System.out.println("++ " + part.getName() + "," + part.getUnitPriceInDollars() + "," + part.getNumber() + "," + part.getPriceInDollars());
+				//System.out.println("++ " + part.getName() + "," + part.getUnitPriceInDollars() + "," + part.getNumber() + "," + part.getPriceInDollars());
 				partLists.add(part);
 			} catch (Exception e) {
 				System.err.println("Error parsing string:" + e);

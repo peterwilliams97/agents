@@ -45,8 +45,8 @@ public class SupplierAgent extends Agent {
 		// CSV file containing list of items in catalog is passed in as the agent argument
 		Object[] args = getArguments();
 		if (args != null && args.length > 0) {
-			String csvFilePath = (String) args[0];
-			System.out.println("Reading catalog from '" + csvFilePath + "'");
+			String csvFilePath = (String)args[0];
+			System.out.println(getAID().getName() + ") Reading catalog from '" + csvFilePath + "'");
 			_catalog = new ItemList(csvFilePath);
 		} else {
 			System.err.println("No catalog file name in agent command lines");
@@ -54,7 +54,7 @@ public class SupplierAgent extends Agent {
 			System.out.println("No target book title specified");
 			doDelete();
 		}
-		System.out.println("Catalog has " + _catalog.getPartLists().size() + " rows worth $" + _catalog.getPriceInDollars());
+		System.out.println(getAID().getName() + ") Catalog has " + _catalog.getPartLists().size() + " rows worth $" + _catalog.getPriceInDollars());
 
 		// Register this Supplier service in the Yellow Pages
 		DFAgentDescription dfd = new DFAgentDescription();
@@ -94,19 +94,7 @@ public class SupplierAgent extends Agent {
 		System.out.println("Supplier Agent " + getAID().getName() + " terminating.");
 	}
 
-	/**
-     This is invoked by the GUI when the user adds a new book for sale
-	 */
-	 /*
-	public void updateCatalogue(final String title, final int price) {
-		addBehaviour(new OneShotBehaviour() {
-			public void action() {
-				catalogue.put(title, new Integer(price));
-				System.out.println(title+" inserted into catalogue. Price = "+price);
-			}
-		} );
-	}
-	*/	
+		
 	/**
 	   Inner class OfferRequestsServer.
 	   This is the behaviour used by Book-seller agents to serve incoming requests 
@@ -167,14 +155,17 @@ public class SupplierAgent extends Agent {
 
 				ItemList order = new ItemList(title, false);
 				double price = -1.0;
-				if (_catalog.contains(order)) {
-					_catalog.subtract(order);
+				if (_catalog.contains(order)) {  
+					// Requested order is available in catalog
+					_catalog.subtract(order);   // Remove order from catalog
 		
-					reply.setPerformative(ACLMessage.INFORM);
-					System.out.println("'" +title + "' sold to agent " + msg.getSender().getName());
-				}
-				else {
-					// The requested book has been sold to another buyer in the meanwhile .
+					reply.setPerformative(ACLMessage.INFORM); // Tell buyer
+					System.out.println(getAID().getName() + ") '" + title + "' sold to agent " 
+					  + msg.getSender().getName()
+					  + " leaving $" + _catalog.getPriceInDollars() + " worth of material in catalog. Contents '" 
+					  + _catalog.getAsString() + "'");
+				}	else {
+					// Requested order is NOT available in catalog
 					reply.setPerformative(ACLMessage.FAILURE);
 					reply.setContent("not-available");
 				}

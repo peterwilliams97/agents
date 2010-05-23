@@ -48,15 +48,15 @@ public class BuyerAgent extends Agent {
 		Object[] args = getArguments();
 		if (args != null && args.length > 0) {
 			String csvFilePath = (String)args[0];
-			System.out.println("Reading order from '" + csvFilePath + "'");
+			System.out.println(getAID().getName() + ") Reading order from '" + csvFilePath + "'");
 			ItemList order = new ItemList(csvFilePath);
 			_orderString = order.getAsString();
-			System.out.println("Order string is '" + _orderString + "'");
+			System.out.println(getAID().getName() + ") Order string is '" + _orderString + "'");
 			
 			// Add a TickerBehaviour that schedules a request to seller agents every minute
 			addBehaviour(new TickerBehaviour(this, 60000) {
 				protected void onTick() {
-					System.out.println("Trying to buy '" + _orderString + "'");
+					System.out.println(getAID().getName() + ") Trying to buy '" + _orderString + "'");
 					// Update the list of seller agents
 					DFAgentDescription template = new DFAgentDescription();
 					ServiceDescription sd = new ServiceDescription();
@@ -64,7 +64,7 @@ public class BuyerAgent extends Agent {
 					template.addServices(sd);
 					try {
 						DFAgentDescription[] result = DFService.search(myAgent, template); 
-						System.out.println("Found the following " + result.length + " supplier agents:");
+						System.out.println(getAID().getName() + ") Found the following " + result.length + " supplier agents:");
 						sellerAgents = new AID[result.length];
 						for (int i = 0; i < result.length; ++i) {
 							sellerAgents[i] = result[i].getName();
@@ -82,7 +82,7 @@ public class BuyerAgent extends Agent {
 		}
 		else {
 			// Make the agent terminate
-			System.out.println("No order CSV file path specified");
+			System.out.println(getAID().getName() + ") No order CSV file path specified");
 			doDelete();
 		}
 	}
@@ -166,12 +166,12 @@ public class BuyerAgent extends Agent {
 					// Purchase order reply received
 					if (reply.getPerformative() == ACLMessage.INFORM) {
 						// Purchase successful. We can terminate
-						System.out.println(_orderString + " successfully purchased from agent "+reply.getSender().getName());
-						System.out.println("Price = "+bestPrice);
+						System.out.println(getAID().getName() + ") '" + _orderString + "' successfully purchased from agent " + reply.getSender().getName());
+						System.out.println("Price = " + bestPrice);
 						myAgent.doDelete();
 					}
 					else {
-						System.out.println("Attempt failed: requested book already sold.");
+						System.out.println(getAID().getName() + ") Attempt failed: Could not purchase '" + _orderString + "'");
 					}
 
 					step = 4;
@@ -185,7 +185,7 @@ public class BuyerAgent extends Agent {
 
 		public boolean done() {
 			if (step == 2 && bestSeller == null) {
-				System.out.println("Attempt failed: "+_orderString+" not available for sale");
+				System.out.println("Attempt failed: '" + _orderString + "' not available for sale");
 			}
 			return ((step == 2 && bestSeller == null) || step == 4);
 		}

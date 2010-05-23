@@ -94,3 +94,25 @@ Buyer-agent Buyer1@192.168.0.4:1099/JADE terminating.
 Yellow Pages??? Does not work!!
 ------------
 java jade.Boot -port 1095 -jade_core_nodeMonitoring_UDPNodeMonitoringService_port 5555 -agents "Gentleman-Jim:examples.bookTrading.BookSellerAgent(War-and-Peace)"
+
+Working Code!!
+--------------
+run_test4.bat
+c:\java\jade>java -cp \java\jade\lib\jade.jar;\java\jade\lib\jadeTools.jar;\java\jade\lib\iiop.jar;\java\jade\lib\commons-codec\commons
+ar  jade.Boot -agents Buyer1:examples.ordering.BuyerAgent(order2.csv);Seller1:examples.ordering.SupplierAgent(catalog1.csv)
+...
+Reading catalog from 'catalog1.csv'
+Buyer agent Buyer1@192.168.0.4:1099/JADE is starting.
+Reading order from 'order2.csv'
+Read catalog1.csv 5 lines ------------------------
+Read order2.csv 5 lines ------------------------
+Order string is 'bricks,100,0.0;cement,1,0.0;wood,10,0.0;sand,2,0.0;nails,500,0.0;'
+Catalog has 5 rows worth $525.0
+Starting Supplier Agent Seller1@192.168.0.4:1099/JADE
+Trying to buy 'bricks,100,0.0;cement,1,0.0;wood,10,0.0;sand,2,0.0;nails,500,0.0;'
+Found the following 1 supplier agents:
+Seller1@192.168.0.4:1099/JADE
+'bricks,100,0.0;cement,1,0.0;wood,10,0.0;sand,2,0.0;nails,500,0.0;' sold to agent Buyer1@192.168.0.4:1099/JADE
+bricks,100,0.0;cement,1,0.0;wood,10,0.0;sand,2,0.0;nails,500,0.0; successfully purchased from agent Seller1@192.168.0.4:1099/JADE
+Price = 55.0
+Buyer-agent Buyer1@192.168.0.4:1099/JADE terminating.

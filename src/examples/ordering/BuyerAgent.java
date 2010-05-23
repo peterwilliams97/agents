@@ -1,4 +1,12 @@
 /*****************************************************************
+
+This code was derived from the bookTrading example code supplied 
+with the Jade distribution. Therefore the following copyright
+from that example is included here.
+=Peter Williams 24 May 2010
+
+--- Original Copyright notice--
+
 JADE - Java Agent DEvelopment Framework is a framework to develop 
 multi-agent systems in compliance with the FIPA specifications.
 Copyright (C) 2000 CSELT S.p.A. 
@@ -167,7 +175,7 @@ public class BuyerAgent extends Agent {
 					if (reply.getPerformative() == ACLMessage.INFORM) {
 						// Purchase successful. We can terminate
 						System.out.println(getAID().getName() + ") '" + _orderString + "' successfully purchased from agent " + reply.getSender().getName());
-						System.out.println("Price = " + bestPrice);
+						System.out.println("Price = $" + bestPrice);
 						myAgent.doDelete();
 					}
 					else {
@@ -185,9 +193,9 @@ public class BuyerAgent extends Agent {
 
 		public boolean done() {
 			if (step == 2 && bestSeller == null) {
-				System.out.println("Attempt failed: '" + _orderString + "' not available for sale");
+				System.out.println("Attempt failed: '" + _orderString + "' could not be fulfilled");
 			}
 			return ((step == 2 && bestSeller == null) || step == 4);
 		}
-	}  // End of inner class RequestPerformer
+	}  
 }

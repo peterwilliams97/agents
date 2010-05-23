@@ -25,13 +25,4 @@ jar cf ordering.jar examples/ordering/*.class
 REM Copy the jar file into Jade directory
 copy ordering.jar ..
 
-REM Check that classes are visible in classpath and well-formed
-java -cp %jade_root%\lib\jade.jar;%jade_root%\lib\jadeTools.jar;%jade_root%\lib\iiop.jar;%jade_root%\lib\commons-codec\commons-codec-1.3.jar;.; examples.ordering.PartItemList
-java -cp %jade_root%\lib\jade.jar;%jade_root%\lib\jadeTools.jar;%jade_root%\lib\iiop.jar;%jade_root%\lib\commons-codec\commons-codec-1.3.jar;.; examples.ordering.ItemList
-java -cp %jade_root%\lib\jade.jar;%jade_root%\lib\jadeTools.jar;%jade_root%\lib\iiop.jar;%jade_root%\lib\commons-codec\commons-codec-1.3.jar;.; examples.ordering.BuyerAgent
-java -cp %jade_root%\lib\jade.jar;%jade_root%\lib\jadeTools.jar;%jade_root%\lib\iiop.jar;%jade_root%\lib\commons-codec\commons-codec-1.3.jar;.; examples.ordering.SupplierAgent
-
-
-copy ordering.jar ordering.zip
-
 :Done

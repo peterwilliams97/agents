@@ -1,4 +1,10 @@
 /*****************************************************************
+This code was derived from the bookTrading example code supplied 
+with the Jade distribution. Therefore the following copyright
+from that example is included here.
+=Peter Williams 24 May 2010
+
+--- Original Copyright notice-
 JADE - Java Agent DEvelopment Framework is a framework to develop 
 multi-agent systems in compliance with the FIPA specifications.
 Copyright (C) 2000 CSELT S.p.A. 
